@@ -8,6 +8,8 @@ async-trait = "0.1.51"
 axum = "0.4.4"
 cqrs-es = "0.2.0"
 ethcontract = "0.15.4"
+futures = "0.3.19"
 serde = {version = "1.0.130", features = ["derive"]}
 thiserror = "1.0.30"
 tokio = {version = "1.16.1", features = ["full"]}
+uuid = {version = "0.8.2", features = ["v4"]}

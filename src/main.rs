@@ -1,7 +1,9 @@
 use axum::{routing::get, Router};
+use error::AppError;
 use std::net::SocketAddr;
 
 mod error;
+mod tokens;
 
 #[tokio::main]
 async fn main() -> Result<(), error::AppError> {
@@ -12,7 +14,8 @@ async fn main() -> Result<(), error::AppError> {
     axum::Server::bind(&addr)
         .serve(app.into_make_service())
         .await
-        .expect("server couldn't bind");
+        .map_err(|e| AppError::IdkMan(e.to_string()))?;
+
     Ok(())
 }
 
