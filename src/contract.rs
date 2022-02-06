@@ -7,8 +7,8 @@ ethcontract::contract!("./contracts/build/contracts/Tokens.json");
 
 #[derive(Debug, Clone)]
 pub struct TokensContract {
-    web3: Web3<Http>,
-    instance: Tokens,
+    pub web3: Web3<Http>,
+    pub instance: Tokens,
 }
 
 impl TokensContract {

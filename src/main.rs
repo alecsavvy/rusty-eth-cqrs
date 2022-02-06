@@ -1,6 +1,6 @@
-use axum::{routing::get, Router};
-use std::{net::SocketAddr, time::Duration};
-use tokio::time::interval;
+use std::net::SocketAddr;
+
+use api::routes::{admin_routes, routes};
 
 mod api;
 mod contract;
@@ -9,33 +9,15 @@ mod store;
 
 #[tokio::main]
 async fn main() {
-    // run all tasks concurrently
-    // TODO: add error handling for each future
-    let (_reader, _server) = tokio::join!(chain_reader(), web_server());
-}
-
-/**
- * Reads chain blocks for events on an interval.
- */
-async fn chain_reader() {
-    let mut reading_interval = interval(Duration::from_secs(3));
-    loop {
-        reading_interval.tick().await;
-        println!("reading chain block");
-    }
-}
-
-async fn web_server() {
-    let app = Router::new().route("/", get(health));
-
     let addr = SocketAddr::from(([127, 0, 0, 1], 3000));
-    axum::Server::bind(&addr)
-        .serve(app.into_make_service())
-        .await
-        .expect("could not stand up server");
-}
+    let admin_addr = SocketAddr::from(([127, 0, 0, 1], 3001));
 
-async fn health() -> &'static str {
-    println!("received request");
-    "up"
+    let public_routes = routes();
+    let public_server = axum::Server::bind(&addr).serve(public_routes.into_make_service());
+
+    let admin_routes = admin_routes();
+    let admin_server = axum::Server::bind(&admin_addr).serve(admin_routes.into_make_service());
+
+    // run all tasks concurrently
+    let (_admin, _public) = tokio::join!(admin_server, public_server);
 }
