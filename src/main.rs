@@ -2,6 +2,11 @@ use axum::{routing::get, Router};
 use std::{net::SocketAddr, time::Duration};
 use tokio::time::interval;
 
+mod api;
+mod contract;
+mod entity;
+mod store;
+
 #[tokio::main]
 async fn main() {
     // run all tasks concurrently
