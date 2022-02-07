@@ -19,6 +19,7 @@ impl TokenRepository {
     }
 
     pub async fn mint(&self) {
+        // TODO: add params from request
         let instance = &self.contract;
         instance
             .mint(Address::random(), vec![1.into()], vec![1.into()])

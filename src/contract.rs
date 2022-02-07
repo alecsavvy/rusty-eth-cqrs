@@ -59,6 +59,8 @@ impl TokensContract {
 
     pub fn event_stream(&self) -> EventStream<TransferBatch> {
         let instance = &self.instance;
+        // TODO: how would I do this for multiple event types?
+        // or multiple streams?
         let batch_transfers = instance
             .events()
             .transfer_batch()
