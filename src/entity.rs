@@ -1,9 +1,5 @@
-use std::time::Duration;
-
-use axum::handler::future;
-use ethcontract::{Http, Web3};
+use ethcontract::{Address, Http, Web3};
 use futures::StreamExt;
-use tokio::time::interval;
 
 use crate::contract::TokensContract;
 
@@ -22,25 +18,17 @@ impl TokensEntity {
         Self { contract }
     }
 
+    pub async fn mint(&self) {
+        let instance = &self.contract;
+        instance
+            .mint(Address::random(), vec![1.into()], vec![1.into()])
+            .await;
+    }
+
     pub async fn event_listener(&self /* callback */) {
-        let mut listening_interval = interval(Duration::from_secs(2));
-        let event_stream = self.contract.event_stream();
-        let (mut transfer_singles, mut transfer_batches) = event_stream;
-        loop {
-            listening_interval.tick().await;
-            println!("reading block for events");
-
-            let (tse, tbe) = tokio::join!(transfer_singles.next(), transfer_batches.next());
-
-            if let Some(Ok(tse)) = tse {
-                println!("found transfer single event {:#?}", tse);
-            }
-
-            if let Some(Ok(tbe)) = tbe {
-                println!("found transfer batch event {:#?}", tbe);
-            }
-
-            // TODO: call callback on each interval if applicable
+        let mut batch_transfers = self.contract.event_stream();
+        while let Some(Ok(event)) = batch_transfers.next().await {
+            println!("found a transfer {:#?}", event);
         }
     }
 }
