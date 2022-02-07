@@ -6,7 +6,7 @@ use std::pin::Pin;
 use ethcontract::{errors::EventError, Bytes, Event, EventStatus, Http, Topic, Web3, H160, U256};
 use futures::{stream::StreamExt, Stream};
 
-use self::tokens::event_data::{TransferBatch, TransferSingle};
+use self::tokens::event_data::TransferBatch;
 
 pub type EventStream<T> =
     Pin<Box<dyn Stream<Item = Result<Event<EventStatus<T>>, EventError>> + Send>>;

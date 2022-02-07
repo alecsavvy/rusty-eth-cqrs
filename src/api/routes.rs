@@ -1,4 +1,4 @@
-use crate::entity::TokensEntity;
+use crate::repositories::token_repository::TokenRepository;
 use axum::{
     extract::Extension,
     routing::{get, post},
@@ -9,7 +9,7 @@ use std::sync::Arc;
 use super::{tokens::*, user::*};
 
 pub struct State {
-    pub tokens_entity: TokensEntity,
+    pub token_repository: TokenRepository,
     /* users_entity: UsersEntity */
 }
 

@@ -8,11 +8,11 @@ use crate::contract::TokensContract;
  * They function independently of each other.
  */
 #[derive(Debug, Clone)]
-pub struct TokensEntity {
+pub struct TokenRepository {
     contract: TokensContract,
 }
 
-impl TokensEntity {
+impl TokenRepository {
     pub async fn new(web3: Web3<Http>) -> Self {
         let contract = TokensContract::new(web3).await;
         Self { contract }

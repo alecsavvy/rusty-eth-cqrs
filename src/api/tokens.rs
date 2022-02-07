@@ -1,7 +1,9 @@
 use super::routes::AppState;
 
+#[allow(dead_code)]
+
 pub async fn mint_nft(state: AppState) {
-    let tokens_entity = &state.tokens_entity;
+    let tokens_entity = &state.token_repository;
     tokens_entity.mint().await;
 }
 

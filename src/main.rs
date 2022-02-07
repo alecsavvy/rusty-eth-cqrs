@@ -1,12 +1,12 @@
 use std::{net::SocketAddr, sync::Arc};
 
 use api::routes::{admin_routes, routes, State};
-use entity::TokensEntity;
 use ethcontract::{Http, Web3};
+use repositories::token_repository::TokenRepository;
 
 mod api;
 mod contract;
-mod entity;
+mod repositories;
 mod store;
 
 #[tokio::main]
@@ -17,10 +17,10 @@ async fn main() {
     let http = Http::new("http://127.0.0.1:8545").expect("transport failed");
     let web3 = Web3::new(http);
 
-    let tokens_entity = TokensEntity::new(web3).await;
+    let tokens_entity = TokenRepository::new(web3).await;
 
     let state = Arc::new(State {
-        tokens_entity: tokens_entity.clone(),
+        token_repository: tokens_entity.clone(),
     });
 
     let public_routes = routes(state.clone());
